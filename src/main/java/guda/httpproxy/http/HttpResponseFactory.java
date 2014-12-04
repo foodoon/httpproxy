@@ -1,10 +1,6 @@
 package guda.httpproxy.http;
 
-/*
- * $RCSfile: HttpResponseFactory.java,v $
- * $Revision: 1.1  $
- * $Date: 2007-7-25  $
- */
+
 
 import java.io.IOException;
 import java.io.InputStream;

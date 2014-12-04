@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.*;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import guda.httpproxy.http.HttpRequest;
 import guda.httpproxy.http.HttpResponse;
+import guda.httpproxy.http.HttpResponseFactory;
 import org.apache.http.Header;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
@@ -45,7 +45,7 @@ public class Dispatcher {
 
     public void dispatch(HttpRequest request) {
         //Socket socket = null;
-
+        logger.info("request========:"+request);
         try {
 
             //socket = this.createSocket(host, port);
@@ -55,6 +55,7 @@ public class Dispatcher {
            // this.request(request, socketOutputStream);
 
            // HttpResponse httpResponse = HttpResponseFactory.read(socketInputStream, socketOutputStream);
+            HttpResponse httpResponse = null;
             CloseableHttpClient client = HttpClientBuilder.create().build();
             if("get".equalsIgnoreCase(request.getMethod())){
                 HttpGet httpGet = new HttpGet();
@@ -74,14 +75,42 @@ public class Dispatcher {
                 }
                 httpGet.setURI(new URI(request.getRequestURL()));
                 CloseableHttpResponse execute = client.execute(httpGet);
-                if(execute.getStatusLine().getStatusCode() == 200){
+               // if(execute.getStatusLine().getStatusCode() == 200){
+               // httpResponse = HttpResponseFactory.read(execute.getEntity().getContent(),request.getOutputStream());
                     byte[] bytes = EntityUtils.toByteArray(execute.getEntity());
                     logger.info("response:" + new String(bytes));
                     request.getOutputStream().write(bytes);
                     request.getOutputStream().flush();
+              //  }
+            }else if("post".equalsIgnoreCase(request.getMethod())){
+                HttpPost httpPost = new HttpPost();
+                if(request.getHeaders()!=null) {
+                  //  Header[] header = new Header[request.getHeaders().size()];
+                    List<Header> headerList = new ArrayList<Header>();
+                    Map<String,String>  headers = request.getHeaders();
+                    Iterator<Map.Entry<String, String>> iterator = headers.entrySet().iterator();
+                    while(iterator.hasNext()){
+                        Map.Entry<String, String> next = iterator.next();
+                        String key = next.getKey();
+                        if(!"Content-Length".equals(key)) {
+                            BasicHeader baseHeader = new BasicHeader(key, next.getValue());
+                            headerList.add( baseHeader);
+                        }
+                    }
+                    httpPost.setHeaders(headerList.toArray(new Header[headerList.size()]));
                 }
+                httpPost.setURI(new URI(request.getRequestURL()));
+
+                CloseableHttpResponse execute = client.execute(httpPost);
+                //httpResponse = HttpResponseFactory.read(execute.getEntity().getContent(),request.getOutputStream());
+                //if(execute.getStatusLine().getStatusCode() == 200){
+                    byte[] bytes = EntityUtils.toByteArray(execute.getEntity());
+                    logger.info("response:" + new String(bytes));
+                    request.getOutputStream().write(bytes);
+                    request.getOutputStream().flush();
+                //}
             }
-            //  this.resonse(httpResponse, request.getOutputStream());
+             //this.resonse(httpResponse, request.getOutputStream());
         } catch (Exception e) {
             logger.error("Warning" , e);
         } finally {
