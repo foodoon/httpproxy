@@ -1,0 +1,7 @@
+<div class="table-responsive">
+    <table class="table">
+        #foreach($device in $deviceList)
+            <tr><td>$device</td></tr>
+        #end
+    </table>
+</div>
