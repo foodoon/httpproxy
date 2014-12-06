@@ -16,6 +16,7 @@ public class DeviceFactory {
             deviceHttpContextPoolQueue.add(deviceHttpContext);
             deviceRequestMap.put(deviceHttpContext.getDeviceHost(),deviceHttpContextPoolQueue);
         }
+        deviceHttpContextPoolQueue.add(deviceHttpContext);
     }
 
     public static Set<String> getAllDevice(){
@@ -28,7 +29,7 @@ public class DeviceFactory {
         if(deviceHttpContextPoolQueue == null){
             return Collections.EMPTY_LIST;
         }
-        return deviceHttpContextPoolQueue.pollAll();
+        return deviceHttpContextPoolQueue.peekAll();
     }
 
 }

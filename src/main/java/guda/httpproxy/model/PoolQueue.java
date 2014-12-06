@@ -1,31 +1,27 @@
 package guda.httpproxy.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Created by well on 2014/12/6.
  */
 public class PoolQueue<E> {
-    private int maxCount = 10;
+    private int maxCount = 30;
 
-    private Queue<E> queue = new LinkedList<E>();
+    private LinkedList<E> queue = new LinkedList<E>();
 
     public synchronized void add(E e){
-        if(queue.size() ==10){
+        if(queue.size() ==maxCount){
             queue.poll();
         }
         queue.add(e);
     }
 
-    public synchronized List<E> pollAll(){
-        int size = queue.size();
-        List<E> list = new ArrayList<E>(size);
-        for(int i=0;i<size;++i){
-            list.add(queue.poll());
-        }
+    public synchronized List<E> peekAll(){
+        List<E> list = new ArrayList<E>(queue.size());
+        list.addAll(queue);
+        Collections.reverse(list);
         return list;
     }
 }

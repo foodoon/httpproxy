@@ -1,5 +1,7 @@
 package guda.httpproxy.model;
 
+import guda.httpproxy.watch.HttpWatch;
+
 /**
  * Created by well on 2014/12/6.
  */
@@ -47,6 +49,12 @@ public class DeviceHttpContext {
 
     public void setDeviceHttpResponse(DeviceHttpResponse deviceHttpResponse) {
         this.deviceHttpResponse = deviceHttpResponse;
+    }
+
+    public String toString(){
+        StringBuilder buf = new StringBuilder();
+        buf.append(getDeviceHttpRequest()).append( HttpWatch.CRLF).append(getDeviceHttpResponse());
+        return buf.toString();
     }
 
 

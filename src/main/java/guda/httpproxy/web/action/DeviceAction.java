@@ -30,4 +30,13 @@ public class DeviceAction {
         return "device/list.vm";
 
     }
+
+    @RequestMapping(value="device/requestList.htm",method = RequestMethod.GET)
+    public String requestlist(HttpServletRequest request, ModelMap modelMap) {
+        String host = request.getParameter("host");
+
+        modelMap.addAttribute("requestlist",deviceBiz.findRequestList(host));
+        return "device/requestList.vm";
+
+    }
 }

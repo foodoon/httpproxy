@@ -59,11 +59,12 @@ public class DeviceHttpRequest {
             }
             String contentType = header.get(DeviceHttpRequest.REQUEST_HEADER_Content_Type);
             if(contentType == null){
+                body = "response stream can not parse,ignore ....";
                 return ;
             }
             String[] split1 = contentType.split(";");
-            if(!split1[0].startsWith("text")){
-                body = "response stream can not parse,ignore ....";
+            if(!split1[0].startsWith("text")||!split1[0].startsWith("application/json") ||!split1[0].startsWith("application/xml")||!split1[0].startsWith("application/text") ){
+                body = "response body is stream can not parse,ignore ....";
                 return;
             }
             if(split1.length>1){
@@ -106,11 +107,42 @@ public class DeviceHttpRequest {
 
     public String toString(){
         StringBuilder buf = new StringBuilder();
-        buf.append("Request URL:").append(HttpWatch.CRLF).append(firstLine).append(HttpWatch.CRLF);
         buf.append("Request Header:").append(HttpWatch.CRLF);
         buf.append(headerBuff);
         buf.append(HttpWatch.CRLF);
         buf.append("Request Body:").append(HttpWatch.CRLF).append(body);
         return buf.toString();
+    }
+
+    public StringBuilder getHeaderBuff() {
+        return headerBuff;
+    }
+
+    public void setHeaderBuff(StringBuilder headerBuff) {
+        this.headerBuff = headerBuff;
+    }
+
+    public String getFirstLine() {
+        return firstLine;
+    }
+
+    public void setFirstLine(String firstLine) {
+        this.firstLine = firstLine;
+    }
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 }

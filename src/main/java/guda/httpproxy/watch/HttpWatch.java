@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -111,7 +112,7 @@ public class HttpWatch {
                 DeviceHttpContext deviceHttpContext = new DeviceHttpContext(requestBuff.toString());
                 DeviceHttpRequest deviceHttpRequest = new DeviceHttpRequest(buf,rlen);
                 deviceHttpContext.setDeviceHttpRequest(deviceHttpRequest);
-                deviceHttpContext.setDeviceHost(mySocket.getRemoteSocketAddress().toString());
+                deviceHttpContext.setDeviceHost(((InetSocketAddress)mySocket.getRemoteSocketAddress()).getHostName());
                // requestInterceptor.on(deviceHttpContext);
                 if (!flag) {
                     mySocket.getOutputStream().write(
@@ -189,7 +190,7 @@ public class HttpWatch {
                 } while (!mySocket.isClosed()
                         && (requestLen = clientIS.read(request)) != -1);
             } catch (Exception e) {
-                log.error("client Socket exception:", e);
+                //log.error("client Socket exception:", e);
             }
 
             os.close();
