@@ -8,6 +8,7 @@ public class DeviceHttpContext {
     private String deviceHost;
 
     private String requestString;
+
     public DeviceHttpContext(String request){
         requestString = request;
     }
@@ -47,4 +48,6 @@ public class DeviceHttpContext {
     public void setDeviceHttpResponse(DeviceHttpResponse deviceHttpResponse) {
         this.deviceHttpResponse = deviceHttpResponse;
     }
+
+
 }

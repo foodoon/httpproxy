@@ -1,20 +1,18 @@
 package guda.httpproxy.watch;
 
+import guda.httpproxy.Interceptor.Interceptor;
 import guda.httpproxy.Interceptor.LogRequestInterceptor;
-import guda.httpproxy.Interceptor.RequestInterceptor;
+import guda.httpproxy.Interceptor.LogResponseInterceptor;
 import guda.httpproxy.model.DeviceHttpContext;
 import guda.httpproxy.model.DeviceHttpRequest;
 import guda.httpproxy.model.DeviceHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.misc.IOUtils;
 
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
 /**
  * Created by well on 2014/12/5.
@@ -29,7 +27,9 @@ public class HttpWatch {
 
     public static String CRLF = System.getProperty("line.separator");
 
-    private RequestInterceptor requestInterceptor = new LogRequestInterceptor();
+    private Interceptor requestInterceptor = new LogRequestInterceptor();
+
+    private Interceptor responseInterceptor = new LogResponseInterceptor();
 
     public HttpWatch(int port) throws IOException {
         myTcpPort = port;
@@ -109,8 +109,10 @@ public class HttpWatch {
                 }
 
                 DeviceHttpContext deviceHttpContext = new DeviceHttpContext(requestBuff.toString());
+                DeviceHttpRequest deviceHttpRequest = new DeviceHttpRequest(buf,rlen);
+                deviceHttpContext.setDeviceHttpRequest(deviceHttpRequest);
                 deviceHttpContext.setDeviceHost(mySocket.getRemoteSocketAddress().toString());
-                requestInterceptor.on(deviceHttpContext);
+               // requestInterceptor.on(deviceHttpContext);
                 if (!flag) {
                     mySocket.getOutputStream().write(
                             "error!".getBytes());
@@ -119,8 +121,7 @@ public class HttpWatch {
                 }
 
                 host.cal();
-                log.info("address:[" + host.address + "]port:"
-                        + host.port + "\n-------------------\n");
+
                 try {
                     if (host.ssl) {
                         pipeSSL(buf, rlen, mySocket, mySocket.getInputStream(),
@@ -177,11 +178,12 @@ public class HttpWatch {
                             // log.info("response:" + new String(bytes));
                             DeviceHttpResponse deviceHttpResponse = new DeviceHttpResponse(bytes);
                             deviceHttpContext.setDeviceHttpResponse(deviceHttpResponse);
+                            responseInterceptor.on(deviceHttpContext);
                             clientOS.write(bytes, 0, resultLen);
                         }
                     } catch (Exception e) {
-                        log.error("target Socket exception:address:" + host.address + ",port" + host.port
-                                + e.getMessage());
+                        //log.error("target Socket exception:address:" + host.address + ",port" + host.port
+                            //    + e.getMessage());
                     }
 
                 } while (!mySocket.isClosed()
