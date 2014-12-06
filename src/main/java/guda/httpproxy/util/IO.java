@@ -1,15 +1,7 @@
 package guda.httpproxy.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
+import java.io.*;
+import java.util.zip.GZIPInputStream;
 
 public class IO {
     private IO() {
@@ -242,5 +234,88 @@ public class IO {
         }
 
         return new String(bos.toByteArray(),charset);
+    }
+
+    public static String uncompress(byte[] buf, int offset, int length,String charset) {
+
+        InputStream is = null;
+        GZIPInputStream gzin = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            is = new ByteArrayInputStream(buf, offset, length);
+            gzin = new GZIPInputStream(is);
+            isr = new InputStreamReader(gzin, charset);
+            br = new BufferedReader(isr);
+            char[] buffer = new char[4096];
+            int readlen = -1;
+            while ((readlen = br.read(buffer, 0, 4096)) != -1) {
+                sb.append(buffer, 0, readlen);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (Exception e1) {
+                // ignore
+            }
+            try {
+                isr.close();
+            } catch (Exception e1) {
+                // ignore
+            }
+            try {
+                gzin.close();
+            } catch (Exception e1) {
+                // ignore
+            }
+            try {
+                is.close();
+            } catch (Exception e1) {
+                // ignore
+            }
+        }
+        return sb.toString();
+    }
+
+    public static byte[] toByteArray(InputStream input) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        int n = 0;
+        while (-1 != (n = input.read(buffer))) {
+            output.write(buffer, 0, n);
+        }
+        return output.toByteArray();
+    }
+
+    public static byte[] readChunked(byte[] bytes) throws IOException{
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int mark = 0;
+        int pos = 0;
+        int orginLength = bytes.length;
+        while((pos+2) < orginLength){
+
+            if((int)bytes[pos+1] == 13 && (int)bytes[pos+2] == 10){
+
+                byte[] length2Byte = new byte[pos - mark + 1];
+                System.arraycopy(bytes, mark, length2Byte, 0, pos - mark + 1);
+                int length2Int = Integer.parseInt(new String(length2Byte), 16);
+                if(length2Int == 0) {
+                    return baos.toByteArray();
+                }
+
+                pos += 3 ; mark = pos;
+                baos.write(bytes, mark, length2Int);
+
+                pos += (length2Int - 1)+3;
+                mark = pos;
+            }else{
+                pos++;
+            }
+        }
+        return baos.toByteArray();
     }
 }

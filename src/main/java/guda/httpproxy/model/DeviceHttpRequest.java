@@ -63,14 +63,14 @@ public class DeviceHttpRequest {
                 return ;
             }
             String[] split1 = contentType.split(";");
-            if(!split1[0].startsWith("text")||!split1[0].startsWith("application/json") ||!split1[0].startsWith("application/xml")||!split1[0].startsWith("application/text") ){
-                body = "response body is stream can not parse,ignore ....";
+            if(!split1[0].startsWith("text")&&!split1[0].startsWith("application/json") &&!split1[0].startsWith("application/xml")&&!split1[0].startsWith("application/text") ){
+                body = "request body is stream can not parse,ignore ....";
                 return;
             }
             if(split1.length>1){
                 String[] splitCharset = split1[1].split("=");
                 if(splitCharset.length ==2){
-                    charset = splitCharset[1];
+                    charset = splitCharset[1].toUpperCase();
                 }
             }
             body = IO.readAsText(byteArrayInputStream,charset);
