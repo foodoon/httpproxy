@@ -237,7 +237,9 @@ public class IO {
     }
 
     public static String uncompress(byte[] buf, int offset, int length,String charset) {
-
+        if(buf == null || length < 1){
+            return null;
+        }
         InputStream is = null;
         GZIPInputStream gzin = null;
         InputStreamReader isr = null;

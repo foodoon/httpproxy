@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +64,9 @@ public class DeviceHttpRequest {
                 return ;
             }
             String[] split1 = contentType.split(";");
-            if(!split1[0].startsWith("text")&&!split1[0].startsWith("application/json") &&!split1[0].startsWith("application/xml")&&!split1[0].startsWith("application/text") ){
+            String contentT = split1[0].toLowerCase();
+            if(!contentT.startsWith("text")&&!contentT.startsWith("application/json") &&!contentT.startsWith("application/xml")&&!contentT.startsWith("application/text") &&
+                    !contentT.startsWith("application/x-www-form-urlencoded")){
                 body = "request body is stream can not parse,ignore ....";
                 return;
             }
@@ -145,4 +148,6 @@ public class DeviceHttpRequest {
     public void setBody(String body) {
         this.body = body;
     }
+
+
 }

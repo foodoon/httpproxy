@@ -15,7 +15,7 @@ public class LogResponseInterceptor implements Interceptor {
 
     @Override
     public void on(DeviceHttpContext deviceHttpContext) {
-        log.info("request" + HttpWatch.CRLF + deviceHttpContext.getRequestString() + HttpWatch.CRLF + "response:" + HttpWatch.CRLF + deviceHttpContext.getDeviceHttpResponse());
+        log.info("request" + HttpWatch.CRLF + deviceHttpContext.getDeviceHttpRequest() + HttpWatch.CRLF + "response:" + HttpWatch.CRLF + deviceHttpContext.getDeviceHttpResponse());
         DeviceFactory.add(deviceHttpContext);
     }
 }
