@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by well on 2014/12/6.
  */
-public class DeviceFactory {
+public class DeviceHttpFactory {
 
     private static Map<String, PoolQueue<DeviceHttpContext>> deviceRequestMap = new HashMap<String, PoolQueue<DeviceHttpContext>>();
 

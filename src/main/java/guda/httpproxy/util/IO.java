@@ -180,18 +180,23 @@ public class IO {
 
 
     public static String readAsText(InputStream inputStream,String charset) throws IOException {
-        java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream, charset));
+        try {
+            java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream, charset));
 
-        int len = 1024;
-        char[] chars = new char[len];
+            int len = 1024;
+            char[] chars = new char[len];
 
-        java.io.StringWriter out = new java.io.StringWriter();
+            java.io.StringWriter out = new java.io.StringWriter();
 
-        while ((len = br.read(chars)) > -1) {
-            out.write(chars, 0, len);
+            while ((len = br.read(chars)) > -1) {
+                out.write(chars, 0, len);
+            }
+
+            return out.toString();
+        }catch(Exception e){
+
         }
-
-        return out.toString();
+        return null;
     }
 
     public static byte[] readLine(InputStream stream) throws IOException {

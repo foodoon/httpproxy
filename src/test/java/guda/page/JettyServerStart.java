@@ -5,7 +5,7 @@
 package guda.page;
 
 
-import guda.httpproxy.watch.HttpWatch;
+import guda.httpproxy.watch.ProxyDispatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public class JettyServerStart extends JettyServer {
 
     public static void main(String[] args) throws Exception {
         try {
-            new HttpWatch(7272);
+            new ProxyDispatch(7272);
         } catch (IOException ioe) {
             log.error("Couldn't start server:\n", ioe);
             System.exit(-1);

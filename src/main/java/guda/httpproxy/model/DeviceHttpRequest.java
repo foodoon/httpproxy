@@ -1,13 +1,12 @@
 package guda.httpproxy.model;
 
 import guda.httpproxy.util.IO;
-import guda.httpproxy.watch.HttpWatch;
+import guda.httpproxy.watch.ProxyDispatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,7 +76,13 @@ public class DeviceHttpRequest {
                 }
             }
             body = IO.readAsText(byteArrayInputStream,charset);
-            body = java.net.URLDecoder.decode(body, charset);
+            try {
+                if(body!=null) {
+                    body = java.net.URLDecoder.decode(body, charset);
+                }
+            }catch(Exception e){
+
+            }
         }catch(Exception e){
             log.error("",e);
         }
@@ -110,10 +115,10 @@ public class DeviceHttpRequest {
 
     public String toString(){
         StringBuilder buf = new StringBuilder();
-        buf.append("Request Header:").append(HttpWatch.CRLF);
+        buf.append("Request Header:").append(ProxyDispatch.CRLF);
         buf.append(headerBuff);
-        buf.append(HttpWatch.CRLF);
-        buf.append("Request Body:").append(HttpWatch.CRLF).append(body);
+        buf.append(ProxyDispatch.CRLF);
+        buf.append("Request Body:").append(ProxyDispatch.CRLF).append(body);
         return buf.toString();
     }
 

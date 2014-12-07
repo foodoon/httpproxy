@@ -1,6 +1,6 @@
 package guda.httpproxy.biz;
 
-import guda.httpproxy.model.DeviceFactory;
+import guda.httpproxy.model.DeviceHttpFactory;
 import guda.httpproxy.model.DeviceHttpContext;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +14,11 @@ import java.util.Set;
 public class DeviceBiz {
 
     public Set<String> findDeviceList(){
-        return DeviceFactory.getAllDevice();
+        return DeviceHttpFactory.getAllDevice();
     }
 
 
     public List<DeviceHttpContext> findRequestList(String host){
-        return DeviceFactory.get(host);
+        return DeviceHttpFactory.get(host);
     }
 }

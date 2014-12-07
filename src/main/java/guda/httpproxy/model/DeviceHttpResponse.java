@@ -1,13 +1,12 @@
 package guda.httpproxy.model;
 
 import guda.httpproxy.util.IO;
-import guda.httpproxy.watch.HttpWatch;
+import guda.httpproxy.watch.ProxyDispatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,10 +191,10 @@ public class DeviceHttpResponse {
 
     public String toString(){
         StringBuilder buf = new StringBuilder();
-        buf.append("Response Header:").append(HttpWatch.CRLF);
+        buf.append("Response Header:").append(ProxyDispatch.CRLF);
         buf.append(headerBuff);
-        buf.append(HttpWatch.CRLF);
-        buf.append("Response Body:").append(HttpWatch.CRLF).append(body);
+        buf.append(ProxyDispatch.CRLF);
+        buf.append("Response Body:").append(ProxyDispatch.CRLF).append(body);
         return buf.toString();
     }
 }

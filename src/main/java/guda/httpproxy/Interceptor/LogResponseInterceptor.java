@@ -1,8 +1,8 @@
 package guda.httpproxy.Interceptor;
 
-import guda.httpproxy.model.DeviceFactory;
+import guda.httpproxy.model.DeviceHttpFactory;
 import guda.httpproxy.model.DeviceHttpContext;
-import guda.httpproxy.watch.HttpWatch;
+import guda.httpproxy.watch.ProxyDispatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,7 @@ public class LogResponseInterceptor implements Interceptor {
 
     @Override
     public void on(DeviceHttpContext deviceHttpContext) {
-        log.info("request" + HttpWatch.CRLF + deviceHttpContext.getDeviceHttpRequest() + HttpWatch.CRLF + "response:" + HttpWatch.CRLF + deviceHttpContext.getDeviceHttpResponse());
-        DeviceFactory.add(deviceHttpContext);
+        log.info("request" + ProxyDispatch.CRLF + deviceHttpContext.getDeviceHttpRequest() + ProxyDispatch.CRLF + "response:" + ProxyDispatch.CRLF + deviceHttpContext.getDeviceHttpResponse());
+        DeviceHttpFactory.add(deviceHttpContext);
     }
 }

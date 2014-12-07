@@ -1,7 +1,9 @@
 package guda.httpproxy.model;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by well on 2014/12/6.
