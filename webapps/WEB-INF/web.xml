@@ -82,6 +82,10 @@
         <servlet-name>mvc</servlet-name>
         <url-pattern>*.xls</url-pattern>
     </servlet-mapping>
+    
+    <welcome-file-list>
+        <welcome-file>help.htm</welcome-file>
+    </welcome-file-list>
 
 
     <display-name>Archetype Created Web Application</display-name>

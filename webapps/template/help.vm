@@ -1,0 +1,7 @@
+<div class="bs-docs-section">
+    <h1 id="overview" class="page-header">设置wifi代理</h1>
+
+    <p class="lead">打开wlan-修改网络设置-显示高级选项-代理设置设置为手动，代理主机名输入:192.168.7.250,代理服务器端口设置为7272</p>
+
+    
+</div>
