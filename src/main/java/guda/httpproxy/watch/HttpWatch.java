@@ -84,6 +84,11 @@ public class HttpWatch {
                 int rlen = 0;
 
                 int read = is.read(buf, 0, bufsize);
+                //检查是否是socket
+                if(read >4){
+                    byte[] length = new byte[5];
+                    System.arraycopy(buf,0,length,0,5);
+                }
                 while (read > 0) {
                     rlen += read;
                     splitbyte = findHeaderEnd(buf, rlen);
