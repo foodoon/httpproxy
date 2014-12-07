@@ -9,24 +9,28 @@ public class DeviceFactory {
 
     private static Map<String, PoolQueue<DeviceHttpContext>> deviceRequestMap = new HashMap<String, PoolQueue<DeviceHttpContext>>();
 
-    public static void add(DeviceHttpContext deviceHttpContext){
+    public static void add(DeviceHttpContext deviceHttpContext) {
         PoolQueue<DeviceHttpContext> deviceHttpContextPoolQueue = deviceRequestMap.get(deviceHttpContext.getDeviceHost());
-        if(deviceHttpContextPoolQueue == null){
+        if (deviceHttpContextPoolQueue == null) {
             deviceHttpContextPoolQueue = new PoolQueue<DeviceHttpContext>();
             deviceHttpContextPoolQueue.add(deviceHttpContext);
-            deviceRequestMap.put(deviceHttpContext.getDeviceHost(),deviceHttpContextPoolQueue);
+            deviceRequestMap.put(deviceHttpContext.getDeviceHost(), deviceHttpContextPoolQueue);
         }
         deviceHttpContextPoolQueue.add(deviceHttpContext);
     }
 
-    public static Set<String> getAllDevice(){
+    public static void remove(String host) {
+        deviceRequestMap.remove(host);
+    }
+
+    public static Set<String> getAllDevice() {
         return deviceRequestMap.keySet();
     }
 
 
-    public static List<DeviceHttpContext> get(String host){
+    public static List<DeviceHttpContext> get(String host) {
         PoolQueue<DeviceHttpContext> deviceHttpContextPoolQueue = deviceRequestMap.get(host);
-        if(deviceHttpContextPoolQueue == null){
+        if (deviceHttpContextPoolQueue == null) {
             return Collections.EMPTY_LIST;
         }
         return deviceHttpContextPoolQueue.peekAll();

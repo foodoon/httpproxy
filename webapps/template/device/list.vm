@@ -1,7 +1,18 @@
 <div class="table-responsive">
     <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>设备IP</th>
+            <th>代理类型</th>
+        </tr>
+        </thead>
         #foreach($device in $deviceList)
-            <tr><td><a href="$!homeServer.getURI("device/requestList.htm").addQueryData('host',$!{device})">$device</a></td></tr>
+            <tr><td>$!{velocityCount}</td>
+                <td>$device</td>
+                <td><a href="$!homeServer.getURI("device/requestList.htm").addQueryData('host',$!{device}).addQueryData('type','http')">HTTP</a>
+                    <a  href="$!homeServer.getURI("device/requestList.htm").addQueryData('host',$!{device}).addQueryData('type','http')">TCP</a></td>
+            </tr>
         #end
     </table>
 </div>

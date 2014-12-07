@@ -3,6 +3,7 @@ package guda.httpproxy.watch;
 import guda.httpproxy.Interceptor.Interceptor;
 import guda.httpproxy.Interceptor.LogRequestInterceptor;
 import guda.httpproxy.Interceptor.LogResponseInterceptor;
+import guda.httpproxy.model.DeviceFactory;
 import guda.httpproxy.model.DeviceHttpContext;
 import guda.httpproxy.model.DeviceHttpRequest;
 import guda.httpproxy.model.DeviceHttpResponse;
@@ -112,7 +113,7 @@ public class HttpWatch {
                 DeviceHttpContext deviceHttpContext = new DeviceHttpContext(requestBuff.toString());
                 DeviceHttpRequest deviceHttpRequest = new DeviceHttpRequest(buf,rlen);
                 deviceHttpContext.setDeviceHttpRequest(deviceHttpRequest);
-                deviceHttpContext.setDeviceHost(((InetSocketAddress)mySocket.getRemoteSocketAddress()).getHostName());
+                deviceHttpContext.setDeviceHost(((InetSocketAddress) mySocket.getRemoteSocketAddress()).getHostName());
                // requestInterceptor.on(deviceHttpContext);
                 if (!flag) {
                     mySocket.getOutputStream().write(
@@ -125,10 +126,10 @@ public class HttpWatch {
 
                 try {
                     if (host.ssl) {
-                        pipeSSL(buf, rlen, mySocket, mySocket.getInputStream(),
+                        pipeSSL(buf, rlen, mySocket.getInputStream(),
                                 mySocket.getOutputStream(), host, deviceHttpContext);
                     } else {
-                        pipe(buf, rlen, mySocket, mySocket.getInputStream(),
+                        pipe(buf, rlen, mySocket.getInputStream(),
                                 mySocket.getOutputStream(), host, deviceHttpContext);
                     }
                 } catch (Exception e) {
@@ -161,7 +162,7 @@ public class HttpWatch {
             return 0;
         }
 
-        void pipe(byte[] request, int requestLen, Socket client,
+        void pipe(byte[] request, int requestLen,
                   InputStream clientIS, OutputStream clientOS, Host host,DeviceHttpContext deviceHttpContext)
                 throws Exception {
             byte bytes[] = new byte[1024 * 32];
@@ -189,20 +190,25 @@ public class HttpWatch {
 
                 } while (!mySocket.isClosed()
                         && (requestLen = clientIS.read(request)) != -1);
+                DeviceFactory.remove(deviceHttpContext.getDeviceHost());
+                log.warn("设备[" + deviceHttpContext.getDeviceHost() + "] offline...");
             } catch (Exception e) {
+                log.warn("设备[" + deviceHttpContext.getDeviceHost() + "] offline...");
+                DeviceFactory.remove(deviceHttpContext.getDeviceHost());
                 //log.error("client Socket exception:", e);
-            }
+            }finally {
 
-            os.close();
-            is.close();
-            clientIS.close();
-            clientOS.close();
-            socket.close();
-            mySocket.close();
+                os.close();
+                is.close();
+                clientIS.close();
+                clientOS.close();
+                socket.close();
+                mySocket.close();
+            }
         }
 
 
-        void pipeSSL(byte[] request, int requestLen, Socket client,
+        void pipeSSL(byte[] request, int requestLen,
                      InputStream clientIS, OutputStream clientOS, Host host,DeviceHttpContext deviceHttpContext)
                 throws Exception {
             SSLSocketFactory sslSocketFactory = CertManager.trustCert(host.address, host.port);

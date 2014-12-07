@@ -1,5 +1,11 @@
 <div class="table-responsive">
-    <table class="table">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>请求url</th>
+        </tr>
+        </thead>
         #foreach($req in $requestlist)
             <tr><td>$!{velocityCount}</td><td>$!req.deviceHttpRequest.firstLine</td></tr>
             <tr class="code_pre" style="display: none"><td colspan="2">
