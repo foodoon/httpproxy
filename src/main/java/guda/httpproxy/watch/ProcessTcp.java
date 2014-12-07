@@ -1,5 +1,8 @@
 package guda.httpproxy.watch;
 
+import guda.httpproxy.model.tcp.DeviceTcpFactory;
+import guda.httpproxy.model.tcp.DeviceTcpPacket;
+import guda.httpproxy.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +18,8 @@ public class ProcessTcp implements Runnable {
 
     public static final Logger log = LoggerFactory.getLogger(ProcessTcp.class);
 
-    public static final int packetHeaderLength = 5;
+    public static final int packetLength = 4;
+    public static final int packetHeaderLength = 2;
 
     private Socket clientSocket;
     private OutputStream clientOutputStream ;
@@ -54,7 +58,7 @@ public class ProcessTcp implements Runnable {
             targetThread.setDaemon(true);
             targetThread.start();
             do {
-                if(firstReadedLength < packetHeaderLength) {
+                if(firstReadedLength < packetLength) {
                     int len = clientInputStream.read(firstReadedBuf, 0, clientbufsize - firstReadedLength);
                     firstReadedLength += len;
                 }
@@ -77,7 +81,11 @@ public class ProcessTcp implements Runnable {
                 firstReadedBuf = new byte[clientbufsize];
                 System.arraycopy(temp, 0, firstReadedBuf, 0, firstReadedLength);
                 //reset end
-                
+                try {
+                    DeviceTcpFactory.addSendPacket(new DeviceTcpPacket(requestPacket));
+                }catch(Exception e){
+                    log.error("",e);
+                }
                 outputStream.write(requestPacket);
                 outputStream.flush();
 
@@ -143,12 +151,12 @@ public class ProcessTcp implements Runnable {
             do{
                 try {
                     InputStream targetInputStream = targetSocket.getInputStream();
-                     if(readLength < packetHeaderLength) {
+                     if(readLength < packetLength) {
                           readLength = targetInputStream.read(readBuff, 0, targetBufsize);
                      }
                     int packetLength = findPacketLength(readBuff,readLength);
-                    if(packetLength < packetHeaderLength){
-                        throw new RuntimeException("packet length wrong" + packetHeaderLength);
+                    if(packetLength < ProcessTcp.packetLength){
+                        throw new RuntimeException("packet length wrong" + ProcessTcp.packetLength);
                     }
                     while (readLength < packetLength) {
                         int len = targetInputStream.read(readBuff, readLength, targetBufsize - readLength);
@@ -164,6 +172,11 @@ public class ProcessTcp implements Runnable {
                     readBuff = new byte[targetBufsize];
                     System.arraycopy(temp, 0, readBuff, 0, readLength);
                     //reset end
+                    try {
+                        DeviceTcpFactory.addRecePacket(new DeviceTcpPacket(responsePacket));
+                    }catch(Exception e){
+                        log.error("",e);
+                    }
                     clientOutputStream.write(responsePacket);
                     clientOutputStream.flush();
                 }catch(Exception e){
@@ -175,19 +188,11 @@ public class ProcessTcp implements Runnable {
 
     private int findPacketLength(final byte[] buf,int rlen){
         //检查是否是socket
-        if(rlen >4){
-            byte[] length = new byte[packetHeaderLength];
-            System.arraycopy(buf,0,length,0,packetHeaderLength);
+        if(rlen >= packetLength){
+            byte[] length = new byte[packetLength];
+            System.arraycopy(buf,0,length,0, packetLength);
 
-            try {
-                String len  = new String(length,ProxyDispatch.defaultCharset);
-                int i = Integer.parseInt(len);
-                if (i > 0) {
-                    return i;
-                }
-            }catch(Exception e){
-
-            }
+            return ByteUtil.getInt(length);
 
         }
         return 0;

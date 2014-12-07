@@ -23,20 +23,33 @@ public class DeviceAction {
     @Resource
     private DeviceBiz deviceBiz;
 
-    @RequestMapping(value="device/list.htm",method = RequestMethod.GET)
+    @RequestMapping(value = "device/list.htm", method = RequestMethod.GET)
     public String list(HttpServletRequest request, ModelMap modelMap) {
         Set<String> deviceList = deviceBiz.findDeviceList();
-        modelMap.addAttribute("deviceList",deviceList);
+        modelMap.addAttribute("deviceList", deviceList);
         return "device/list.vm";
 
     }
 
-    @RequestMapping(value="device/requestList.htm",method = RequestMethod.GET)
+    @RequestMapping(value = "device/requestList.htm", method = RequestMethod.GET)
     public String requestlist(HttpServletRequest request, ModelMap modelMap) {
         String host = request.getParameter("host");
 
-        modelMap.addAttribute("requestlist",deviceBiz.findRequestList(host));
+        modelMap.addAttribute("requestlist", deviceBiz.findHttpRequestList(host));
         return "device/requestList.vm";
+
+
+    }
+
+
+    @RequestMapping(value = "device/packetList.htm", method = RequestMethod.GET)
+    public String packetList(HttpServletRequest request, ModelMap modelMap) {
+        String host = request.getParameter("host");
+
+
+        modelMap.addAttribute("packetlist", deviceBiz.findTcpPacket(host));
+        return "device/packetlist.vm";
+
 
     }
 }

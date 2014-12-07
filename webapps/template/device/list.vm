@@ -10,8 +10,8 @@
         #foreach($device in $deviceList)
             <tr><td>$!{velocityCount}</td>
                 <td>$device</td>
-                <td><a href="$!homeServer.getURI("device/requestList.htm").addQueryData('host',$!{device}).addQueryData('type','http')">HTTP</a>
-                    <a  href="$!homeServer.getURI("device/requestList.htm").addQueryData('host',$!{device}).addQueryData('type','http')">TCP</a></td>
+                <td><a href="$!homeServer.getURI("device/requestList.htm").addQueryData('host',$!{device}).addQueryData('t','http')">HTTP</a>
+                    <a  href="$!homeServer.getURI("device/requestList.htm").addQueryData('host',$!{device}).addQueryData('t','http')">TCP</a></td>
             </tr>
         #end
     </table>
