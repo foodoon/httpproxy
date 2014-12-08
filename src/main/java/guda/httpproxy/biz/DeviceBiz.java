@@ -27,4 +27,8 @@ public class DeviceBiz {
     public List<DeviceTcpPacket> findTcpPacket(String host){
         return DeviceTcpFactory.get(host);
     }
+
+    public List<DeviceHttpContext> clean(String host){
+        return DeviceHttpFactory.clean(host);
+    }
 }

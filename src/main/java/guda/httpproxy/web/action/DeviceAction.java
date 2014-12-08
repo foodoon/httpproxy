@@ -34,8 +34,18 @@ public class DeviceAction {
     @RequestMapping(value = "device/requestList.htm", method = RequestMethod.GET)
     public String requestlist(HttpServletRequest request, ModelMap modelMap) {
         String host = request.getParameter("host");
-
+        modelMap.addAttribute("device",host);
         modelMap.addAttribute("requestlist", deviceBiz.findHttpRequestList(host));
+        return "device/requestList.vm";
+
+
+    }
+
+    @RequestMapping(value = "device/clean.htm", method = RequestMethod.GET)
+    public String clean(HttpServletRequest request, ModelMap modelMap) {
+        String host = request.getParameter("host");
+        modelMap.addAttribute("device",host);
+        modelMap.addAttribute("requestlist", deviceBiz.clean(host));
         return "device/requestList.vm";
 
 

@@ -69,5 +69,4 @@
     </bean>
 
 
-    <import resource="biz.xml"></import>
 </beans>

@@ -10,8 +10,9 @@ public class DeviceHttpFactory {
     private static LinkedHashMap<String, PoolQueue<DeviceHttpContext>> deviceRequestMap = new LinkedHashMap<String, PoolQueue<DeviceHttpContext>>();
 
     private int maxDeviceCount = 100;
-    public synchronized static void   add(DeviceHttpContext deviceHttpContext) {
-        if(deviceRequestMap.size()>100){
+
+    public synchronized static void add(DeviceHttpContext deviceHttpContext) {
+        if (deviceRequestMap.size() > 100) {
             String next = deviceRequestMap.keySet().iterator().next();
             deviceRequestMap.remove(next);
         }
@@ -36,6 +37,12 @@ public class DeviceHttpFactory {
             return Collections.EMPTY_LIST;
         }
         return deviceHttpContextPoolQueue.peekAll();
+    }
+
+    public static List<DeviceHttpContext> clean(String host) {
+        PoolQueue<DeviceHttpContext> deviceHttpContextPoolQueue = deviceRequestMap.get(host);
+        deviceHttpContextPoolQueue = new PoolQueue<DeviceHttpContext>();
+        return Collections.emptyList();
     }
 
 }

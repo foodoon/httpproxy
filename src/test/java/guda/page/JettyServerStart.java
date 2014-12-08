@@ -5,11 +5,14 @@
 package guda.page;
 
 
+import guda.httpproxy.watch.ProxyConfig;
 import guda.httpproxy.watch.ProxyDispatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.io.IOException;
+import java.util.Properties;
 
 /**
  * 
@@ -22,10 +25,17 @@ public class JettyServerStart extends JettyServer {
 
     public static void main(String[] args)  {
         try {
-            new ProxyDispatch(7272);
-        } catch (IOException ioe) {
-            log.error("Couldn't start server:\n", ioe);
-            System.exit(-1);
+            Properties properties = PropertiesLoaderUtils.loadAllProperties("app.properties");
+            try {
+                int port = Integer.parseInt(properties.getProperty("proxy.port"));
+                new ProxyDispatch(port);
+                log.info("proxy start on " + port);
+            } catch (IOException ioe) {
+                log.error("Couldn't start server:\n", ioe);
+                System.exit(-1);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         JettyServer jetty = new JettyServer();
         try {
@@ -33,5 +43,7 @@ public class JettyServerStart extends JettyServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 }

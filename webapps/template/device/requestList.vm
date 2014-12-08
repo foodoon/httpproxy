@@ -1,3 +1,16 @@
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+        <div class="panel-body ">
+            <button type="button" class="btn btn-success refresh">刷新</button>
+            <button type="button" class="btn btn-warning clean">清除</button>
+        </div>
+
+    </div>
+    </div>
+
+
+
 <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
@@ -28,6 +41,13 @@
             }else{
                 $(this).next().show("slow");
             }
+        });
+
+        $(".refresh").bind("click",function(){
+            location.reload();
+        });
+        $(".clean").bind("click",function(){
+            location.href="$!homeServer.getURI("device/clean.htm").addQueryData('host',$!{device})"
         });
 
     })

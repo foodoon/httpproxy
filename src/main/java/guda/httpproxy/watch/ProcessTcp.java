@@ -2,6 +2,7 @@ package guda.httpproxy.watch;
 
 import guda.httpproxy.model.tcp.DeviceTcpFactory;
 import guda.httpproxy.model.tcp.DeviceTcpPacket;
+import guda.httpproxy.util.AppPropertiesUtil;
 import guda.httpproxy.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,8 @@ public class ProcessTcp implements Runnable {
     private OutputStream clientOutputStream ;
     private byte[] firstReadedBuf;
     private int firstReadedLength;
-    private String tcpTargetHost = TcpProxyConfig.getHost();
-    private int tcpTargetPort = TcpProxyConfig.getPort();
+    private String tcpTargetHost = AppPropertiesUtil.getAppProperties("proxy.tcp.target.host");
+    private int tcpTargetPort = Integer.parseInt(AppPropertiesUtil.getAppProperties("proxy.tcp.target.port"));
     private int clientbufsize = 8192;
 
     public ProcessTcp(Socket s, byte[] buf,int len,String tcpHost,int tcpPort) {
