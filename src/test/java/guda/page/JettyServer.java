@@ -52,26 +52,12 @@ public class JettyServer {
                + File.separatorChar + "WEB-INF"+File.separatorChar+"web.xml";
     }
 
-    private String getWebDefDescriptor() {
-        return getAppRoot() + File.separatorChar + "assembly" + File.separatorChar + "config"
-               + File.separatorChar + "webdefault.xml";
-    }
 
-    private String getRealm() {
-        return getAppRoot() + File.separatorChar + "assembly" + File.separatorChar + "config"
-               + File.separatorChar + "realm.properties";
-    }
-
-    protected String getAppName() {
-        return ConfigrationFactory.getConfigration().getAppName();
-    }
 
     protected String getAppRoot() {
-        return ConfigrationFactory.getConfigration().getAppRoot();
+        return System.getProperty("user.dir");
     }
 
-    protected String getHtdocsRoot() {
-        return ConfigrationFactory.getConfigration().getHtdocsRoot();
-    }
+
 
 }

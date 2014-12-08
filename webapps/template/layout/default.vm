@@ -1,7 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>http watch</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="$!homeServer.getURI("assets/bootstrap-3.2.0-dist/css/bootstrap.min.css")">
     <link rel="stylesheet" href="$!homeServer.getURI("assets/bootstrap-3.2.0-dist/css/bootstrap-responsive.css")">
     <script src="$!homeServer.getURI("assets/js/jquery-1.11.1.min.js")"></script>
@@ -10,6 +12,7 @@
             padding-top: 60px;
             padding-bottom: 40px;
         }
+
         .sidebar-nav {
             padding: 9px 0;
         }
@@ -24,47 +27,52 @@
         }
     </style>
 </head>
- <body>
+<body>
 
- <div class="navbar navbar-inverse navbar-fixed-top">
-     <div class="navbar-inner">
-         <div class="container-fluid">
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
 
-             <a class="brand" href="#"><h3>Http Watch</h3></a>
+            <a class="brand" href="#"><h3>Http Watch</h3></a>
 
-         </div>
-     </div>
- </div>
+        </div>
+    </div>
+</div>
 
- <div class="container-fluid">
-     <div class="row-fluid">
-         <div class="span3">
-             <div class="well sidebar-nav">
-                 <ul class="nav nav-list">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
 
-                     <li><a href="$!homeServer.getURI("help.htm")">使用帮助</a></li>
-                     <li><a href="$!homeServer.getURI("device/list.htm")">在线设备列表</a></li>
+                    <li><a href="$!homeServer.getURI("help.htm")">使用帮助</a></li>
+                    <li><a href="$!homeServer.getURI("device/list.htm")">在线设备列表</a></li>
 
-                 </ul>
-             </div><!--/.well -->
-         </div><!--/span-->
-         <div class="span9">
-             <div class="row-fluid">
-             $screen_content
-                 </div>
-         </div><!--/span-->
-     </div><!--/row-->
+                </ul>
+            </div>
+            <!--/.well -->
+        </div>
+        <!--/span-->
+        <div class="span9">
+            <div class="row-fluid">
+                $screen_content
+            </div>
+        </div>
+        <!--/span-->
+    </div>
+    <!--/row-->
 
-     <hr>
+    <hr>
 
-     <footer>
-         <p>&copy; Company 2014</p>
-     </footer>
+    <footer>
+        <p>&copy; Company 2014</p>
+    </footer>
 
- </div><!--/.fluid-container-->
+</div>
+<!--/.fluid-container-->
 
 
- </body>
+</body>
 
 <script src="$!homeServer.getURI("assets/bootstrap-3.2.0-dist/js/bootstrap.min.js")"></script>
 

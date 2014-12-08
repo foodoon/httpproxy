@@ -20,7 +20,7 @@ public class JettyServerStart extends JettyServer {
 
     public static Logger log = LoggerFactory.getLogger(JettyServerStart.class);
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
         try {
             new ProxyDispatch(7272);
         } catch (IOException ioe) {
@@ -28,6 +28,10 @@ public class JettyServerStart extends JettyServer {
             System.exit(-1);
         }
         JettyServer jetty = new JettyServer();
-        jetty.start();
+        try {
+            jetty.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
