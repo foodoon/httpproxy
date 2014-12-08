@@ -11,9 +11,7 @@ public class DeviceHttpContext {
 
     private String requestString;
 
-    public DeviceHttpContext(String request){
-        requestString = request;
-    }
+
 
     public String getRequestString() {
         return requestString;
@@ -40,6 +38,7 @@ public class DeviceHttpContext {
     }
 
     public void setDeviceHttpRequest(DeviceHttpRequest deviceHttpRequest) {
+        this.requestString = deviceHttpRequest.getFirstLine();
         this.deviceHttpRequest = deviceHttpRequest;
     }
 

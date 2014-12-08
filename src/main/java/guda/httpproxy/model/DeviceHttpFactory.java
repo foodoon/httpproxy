@@ -7,9 +7,14 @@ import java.util.*;
  */
 public class DeviceHttpFactory {
 
-    private static Map<String, PoolQueue<DeviceHttpContext>> deviceRequestMap = new HashMap<String, PoolQueue<DeviceHttpContext>>();
+    private static LinkedHashMap<String, PoolQueue<DeviceHttpContext>> deviceRequestMap = new LinkedHashMap<String, PoolQueue<DeviceHttpContext>>();
 
-    public static void add(DeviceHttpContext deviceHttpContext) {
+    private int maxDeviceCount = 100;
+    public synchronized static void   add(DeviceHttpContext deviceHttpContext) {
+        if(deviceRequestMap.size()>100){
+            String next = deviceRequestMap.keySet().iterator().next();
+            deviceRequestMap.remove(next);
+        }
         PoolQueue<DeviceHttpContext> deviceHttpContextPoolQueue = deviceRequestMap.get(deviceHttpContext.getDeviceHost());
         if (deviceHttpContextPoolQueue == null) {
             deviceHttpContextPoolQueue = new PoolQueue<DeviceHttpContext>();
@@ -19,9 +24,6 @@ public class DeviceHttpFactory {
         deviceHttpContextPoolQueue.add(deviceHttpContext);
     }
 
-    public static void remove(String host) {
-        deviceRequestMap.remove(host);
-    }
 
     public static Set<String> getAllDevice() {
         return deviceRequestMap.keySet();

@@ -7,7 +7,7 @@
         </tr>
         </thead>
         #foreach($req in $requestlist)
-            <tr><td>$!{velocityCount}</td><td>$!req.deviceHttpRequest.firstLine</td></tr>
+            <tr class="url_pre"><td>$!{velocityCount}</td><td>$!req.deviceHttpRequest.firstLine</td></tr>
             <tr class="code_pre" style="display: none"><td colspan="2">
             <div class="highlight" >
                 <pre>
@@ -21,9 +21,13 @@
 <script language="javascript">
     $(document).ready(function(){
 
-        $(".table tr").bind("click",function(){
+        $(".url_pre").bind("click",function(){
             $(".code_pre").hide("slow");
-            $(this).next().show("slow");
+            if($(this).next().is(':visible')) {
+                $(this).next().hide("slow");
+            }else{
+                $(this).next().show("slow");
+            }
         });
 
     })

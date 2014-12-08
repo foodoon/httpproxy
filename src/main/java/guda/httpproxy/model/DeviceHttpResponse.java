@@ -8,6 +8,8 @@ import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +41,8 @@ public class DeviceHttpResponse {
     private byte[] responseStream;
 
     private String charset  = "UTF-8";
+
+    private String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:ssss").format(new Date());
 
 
     public DeviceHttpResponse(byte[] response){
@@ -75,7 +79,7 @@ public class DeviceHttpResponse {
             }
             String contentType = header.get(DeviceHttpResponse.RESPONSE_HEADER_Content_Type);
             if(contentType == null){
-                headerBuff = new StringBuilder("response head is stream... can not parse,ignore ....");
+                headerBuff.append(ProxyDispatch.CRLF).append("response head is stream... can not parse,ignore ....");
                 return ;
             }
             String[] split1 = contentType.split(";");
@@ -191,7 +195,7 @@ public class DeviceHttpResponse {
 
     public String toString(){
         StringBuilder buf = new StringBuilder();
-        buf.append("Response Header:").append(ProxyDispatch.CRLF);
+        buf.append("Response Header:").append("[time:]").append(time).append(ProxyDispatch.CRLF);
         buf.append(headerBuff);
         buf.append(ProxyDispatch.CRLF);
         buf.append("Response Body:").append(ProxyDispatch.CRLF).append(body);

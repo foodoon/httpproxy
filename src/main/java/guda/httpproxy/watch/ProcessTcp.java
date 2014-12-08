@@ -25,8 +25,8 @@ public class ProcessTcp implements Runnable {
     private OutputStream clientOutputStream ;
     private byte[] firstReadedBuf;
     private int firstReadedLength;
-    private String tcpTargetHost;
-    private int tcpTargetPort;
+    private String tcpTargetHost = TcpProxyConfig.getHost();
+    private int tcpTargetPort = TcpProxyConfig.getPort();
     private int clientbufsize = 8192;
 
     public ProcessTcp(Socket s, byte[] buf,int len,String tcpHost,int tcpPort) {
@@ -35,9 +35,7 @@ public class ProcessTcp implements Runnable {
         firstReadedLength = len;
         tcpTargetHost = tcpHost;
         tcpTargetPort = tcpPort;
-        Thread t = new Thread(this);
-        t.setDaemon(true);
-        t.start();
+
     }
 
     @Override

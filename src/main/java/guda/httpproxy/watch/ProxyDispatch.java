@@ -92,12 +92,16 @@ public class ProxyDispatch {
                 int rlen = 0;
 
                 int read = is.read(buf, 0, bufsize);
-
+                boolean isTcp = false;
                 while (read > 0) {
                     rlen += read;
                     if(findPacketLength(buf,rlen)> 0){
                         //is tcp protocal
-                        new Thread(new ProcessTcp(clientSocket,buf,rlen,tcpTargetHost,tcpTargetPort)).start();
+                        log.info("it is tcp...");
+                        Thread thread = new Thread(new ProcessTcp(clientSocket, buf, rlen, tcpTargetHost, tcpTargetPort));
+                        thread.setDaemon(true);
+                        thread.start();
+                        isTcp = true;
                         break;
                     }
                     splitbyte = findHeaderEnd(buf, rlen);
@@ -106,31 +110,33 @@ public class ProxyDispatch {
                     }
                     read = is.read(buf, rlen, bufsize - rlen);
                 }
-                ByteArrayInputStream hbis = new ByteArrayInputStream(buf,
-                        0, rlen);
-                BufferedReader hin = new BufferedReader(
-                        new InputStreamReader(hbis));
-                Host host = new Host();
+                if(!isTcp) {
+                    ByteArrayInputStream hbis = new ByteArrayInputStream(buf,
+                            0, rlen);
+                    BufferedReader hin = new BufferedReader(
+                            new InputStreamReader(hbis));
+                    Host host = new Host();
 
-                String string;
-                boolean flag = false;
-                StringBuilder requestBuff = new StringBuilder();
-                while ((string = hin.readLine()) != null) {
-                    if (string.toLowerCase().startsWith("host:")) {
-                        host.host = string;
-                        flag = true;
+                    String string;
+                    boolean flag = false;
+                    StringBuilder requestBuff = new StringBuilder();
+                    while ((string = hin.readLine()) != null) {
+                        if (string.toLowerCase().startsWith("host:")) {
+                            host.host = string;
+                            flag = true;
+                        }
+                        checkSSL(string, host);
+                        requestBuff.append(string).append(CRLF);
+
                     }
-                    checkSSL(string, host);
-                    requestBuff.append(string).append(CRLF);
-
+                    if (!flag) {
+                        clientSocket.getOutputStream().write(
+                                "error!".getBytes());
+                        clientSocket.close();
+                        return;
+                    }
+                    new Thread(new ProcessHttp(clientSocket, buf, host, requestBuff, rlen)).start();
                 }
-                if (!flag) {
-                    clientSocket.getOutputStream().write(
-                            "error!".getBytes());
-                    clientSocket.close();
-                    return;
-                }
-                new Thread(new ProcessHttp(clientSocket,buf,host, requestBuff,rlen)).start();
             }catch (Exception e){
                  log.error("",e);
             }

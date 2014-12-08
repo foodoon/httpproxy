@@ -28,7 +28,7 @@
         <property name="locations" value="classpath:app.properties"/>
     </bean>
 
-    <bean   class="guda.mvc.spring.SpringBeanFactoryTool">
+    <bean id="springBeanFactoryTool"  class="guda.mvc.spring.SpringBeanFactoryTool">
     </bean>
 
 	<bean id="messageSource"
@@ -69,4 +69,5 @@
     </bean>
 
 
+    <import resource="biz.xml"></import>
 </beans>

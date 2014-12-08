@@ -1,5 +1,6 @@
 package guda.httpproxy.model.tcp;
 
+import com.alibaba.fastjson.JSON;
 import guda.httpproxy.util.ByteUtil;
 import guda.httpproxy.watch.ProcessTcp;
 import guda.httpproxy.watch.ProxyDispatch;
@@ -39,7 +40,7 @@ public class DeviceTcpPacket {
         }
         byte[] headerByte = new byte[headerLength];
         System.arraycopy(packet,ProcessTcp.packetLength,headerLen,0,ProcessTcp.packetHeaderLength);
-        header = ByteUtil.getString(headerByte);
+        header = JSON.toJSONString(TcpUtil.decodeHeader(headerByte));
         byte[] bodyByte = new byte[totalLength - headerLength- ProcessTcp.packetLength];
         System.arraycopy(packet,headerLength+ ProcessTcp.packetLength,bodyByte,0,bodyByte.length);
         body = ByteUtil.getString(bodyByte);

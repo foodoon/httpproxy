@@ -309,7 +309,10 @@ public class IO {
 
                 byte[] length2Byte = new byte[pos - mark + 1];
                 System.arraycopy(bytes, mark, length2Byte, 0, pos - mark + 1);
-                int length2Int = Integer.parseInt(new String(length2Byte), 16);
+                int length2Int = get16Int(new String(length2Byte));
+                if(length2Int == -1){
+                    continue;
+                }
                 if(length2Int == 0) {
                     return baos.toByteArray();
                 }
@@ -324,5 +327,17 @@ public class IO {
             }
         }
         return baos.toByteArray();
+    }
+
+    private static int get16Int(String str){
+        if(str == null){
+            return -1;
+        }
+        try {
+            return Integer.parseInt(str, 16);
+        }catch(Exception e){
+
+        }
+        return -1;
     }
 }

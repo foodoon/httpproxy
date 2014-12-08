@@ -40,9 +40,6 @@ public class DeviceTcpFactory {
         deviceTcpPoolQueue.add(deviceTcpPacket);
     }
 
-    public static void remove(String host) {
-        packetMap.remove(host);
-    }
 
     public static Set<String> getAllDevice() {
         return packetMap.keySet();

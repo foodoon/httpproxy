@@ -9,12 +9,12 @@ import java.util.List;
  * Created by well on 2014/12/6.
  */
 public class PoolQueue<E> {
-    private int maxCount = 30;
+    private int maxCount = 100;
 
     private LinkedList<E> queue = new LinkedList<E>();
 
     public synchronized void add(E e){
-        if(queue.size() ==maxCount){
+        if(queue.size() >=maxCount){
             queue.poll();
         }
         queue.add(e);

@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +39,8 @@ public class DeviceHttpRequest {
     private String charset = "UTF-8";
 
     private String body;
+
+    private String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:ssss").format(new Date());
 
     public DeviceHttpRequest(byte[] buff,int length){
         if(buff == null || length <1){
@@ -115,7 +119,7 @@ public class DeviceHttpRequest {
 
     public String toString(){
         StringBuilder buf = new StringBuilder();
-        buf.append("Request Header:").append(ProxyDispatch.CRLF);
+        buf.append("Request Header:").append("[time:]").append(time).append(ProxyDispatch.CRLF);
         buf.append(headerBuff);
         buf.append(ProxyDispatch.CRLF);
         buf.append("Request Body:").append(ProxyDispatch.CRLF).append(body);
