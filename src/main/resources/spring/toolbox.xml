@@ -8,6 +8,12 @@
 		<tool key="operationContext"
 			class="guda.mvc.security.OperationContextHolder" />
 	</toolbox>
-	
+
+    <tool>
+        <key>esc</key>
+        <scope>application</scope>
+        <class>org.apache.velocity.tools.generic.EscapeTool</class>
+    </tool>
+
 
 </tools>

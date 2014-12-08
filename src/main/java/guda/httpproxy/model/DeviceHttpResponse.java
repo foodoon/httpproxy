@@ -5,6 +5,7 @@ import guda.httpproxy.watch.ProxyDispatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.HtmlUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -198,7 +199,11 @@ public class DeviceHttpResponse {
         buf.append("Response Header:").append("[time:]").append(time).append(ProxyDispatch.CRLF);
         buf.append(headerBuff);
         buf.append(ProxyDispatch.CRLF);
-        buf.append("Response Body:").append(ProxyDispatch.CRLF).append(body);
+        buf.append("Response Body:").append(ProxyDispatch.CRLF);
+
+        if(body!=null){
+            buf.append(HtmlUtils.htmlEscape(body));
+        }
         return buf.toString();
     }
 }

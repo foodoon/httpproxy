@@ -310,18 +310,21 @@ public class IO {
                 byte[] length2Byte = new byte[pos - mark + 1];
                 System.arraycopy(bytes, mark, length2Byte, 0, pos - mark + 1);
                 int length2Int = get16Int(new String(length2Byte));
-                if(length2Int == -1){
+                if(length2Int == -1) {
+                    pos++;
                     continue;
                 }
-                if(length2Int == 0) {
-                    return baos.toByteArray();
-                }
+                    if (length2Int == 0) {
+                        return baos.toByteArray();
+                    }
 
-                pos += 3 ; mark = pos;
-                baos.write(bytes, mark, length2Int);
+                    pos += 3;
+                    mark = pos;
+                    baos.write(bytes, mark, length2Int);
 
-                pos += (length2Int - 1)+3;
-                mark = pos;
+                    pos += (length2Int - 1) + 3;
+                    mark = pos;
+
             }else{
                 pos++;
             }

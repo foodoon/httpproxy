@@ -56,5 +56,14 @@ public class DeviceHttpContext {
         return buf.toString();
     }
 
+    public DeviceHttpContext copy(){
+        DeviceHttpContext context = new DeviceHttpContext();
+        context.setDeviceHttpResponse(this.deviceHttpResponse);
+        context.setDeviceHost(this.deviceHost);
+        context.setDeviceHttpRequest(this.deviceHttpRequest);
+        context.setRequestString(this.requestString);
+        return context;
+    }
+
 
 }

@@ -96,9 +96,10 @@ public class ProcessHttp implements Runnable {
                         clientOS.write(bytes, 0, resultLen);
                         clientOS.flush();
                         log.info(Thread.currentThread().getName() + "request:" + new String(request) + ProxyDispatch.CRLF + "response:" + new String(bytes));
+                        DeviceHttpContext copy = deviceHttpContext.copy();
                         DeviceHttpResponse deviceHttpResponse = new DeviceHttpResponse(bytes);
-                        deviceHttpContext.setDeviceHttpResponse(deviceHttpResponse);
-                        responseInterceptor.on(deviceHttpContext);
+                        copy.setDeviceHttpResponse(deviceHttpResponse);
+                        responseInterceptor.on(copy);
 
                     }
                 } catch (Exception e) {
