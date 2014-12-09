@@ -8,11 +8,11 @@ import java.util.*;
 public class DeviceHttpFactory {
 
     private static LinkedHashMap<String, PoolQueue<DeviceHttpContext>> deviceRequestMap = new LinkedHashMap<String, PoolQueue<DeviceHttpContext>>();
-
-    private int maxDeviceCount = 100;
+    private static HashMap<UUID, DeviceHttpContext> request = new HashMap<UUID, DeviceHttpContext>();
+    private static int maxDeviceCount = 100;
 
     public synchronized static void add(DeviceHttpContext deviceHttpContext) {
-        if (deviceRequestMap.size() > 100) {
+        if (deviceRequestMap.size() > maxDeviceCount) {
             String next = deviceRequestMap.keySet().iterator().next();
             deviceRequestMap.remove(next);
         }
@@ -23,6 +23,25 @@ public class DeviceHttpFactory {
             deviceRequestMap.put(deviceHttpContext.getDeviceHost(), deviceHttpContextPoolQueue);
         }
         deviceHttpContextPoolQueue.add(deviceHttpContext);
+        request.put(deviceHttpContext.getId(),deviceHttpContext);
+    }
+
+    public  static void fillResponse(UUID uuid,DeviceHttpResponse response, DeviceHttpContext deviceHttpContext) {
+        DeviceHttpContext deviceHttpContext1 = request.get(uuid);
+        if(deviceHttpContext1 == null){
+            if (deviceRequestMap.size() > 100) {
+                String next = deviceRequestMap.keySet().iterator().next();
+                deviceRequestMap.remove(next);
+            }
+            PoolQueue<DeviceHttpContext> deviceHttpContextPoolQueue = deviceRequestMap.get(deviceHttpContext.getDeviceHost());
+            if (deviceHttpContextPoolQueue == null) {
+                deviceHttpContextPoolQueue = new PoolQueue<DeviceHttpContext>();
+                deviceHttpContextPoolQueue.add(deviceHttpContext);
+                deviceRequestMap.put(deviceHttpContext.getDeviceHost(), deviceHttpContextPoolQueue);
+            }
+            deviceHttpContextPoolQueue.add(deviceHttpContext);
+        }
+        deviceHttpContext1.setDeviceHttpResponse(response);
     }
 
 

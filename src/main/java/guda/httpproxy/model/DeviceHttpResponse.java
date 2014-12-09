@@ -44,7 +44,7 @@ public class DeviceHttpResponse {
     private String charset  = "UTF-8";
 
     private String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:ssss").format(new Date());
-
+    public static final String[] canParseContentType = new String[]{"application/json","text","application/javascript","application/xml","application/text","application/x-www-form-urlencoded"};
 
     public DeviceHttpResponse(byte[] response){
         responseStream = response;
@@ -84,7 +84,7 @@ public class DeviceHttpResponse {
                 return ;
             }
             String[] split1 = contentType.split(";");
-            if(!split1[0].startsWith("text")&&!split1[0].startsWith("application/json") &&!split1[0].startsWith("application/xml")&&!split1[0].startsWith("application/text") ){
+            if(!matchContentType(split1[0])){
                 body = "response body is stream can not parse,ignore ....";
                 return;
             }
@@ -142,6 +142,18 @@ public class DeviceHttpResponse {
         s = header.get(DeviceHttpResponse.RESPONSE_HEADER_TE);
         if (s!=null && s.indexOf("chunked") >= 0){
             return true;
+        }
+        return false;
+    }
+
+    private boolean matchContentType(String contentType){
+        if(contentType == null){
+            return false;
+        }
+        for(String str:canParseContentType){
+            if(contentType.startsWith(str)|| contentType.equalsIgnoreCase(str)){
+                return true;
+            }
         }
         return false;
     }

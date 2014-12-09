@@ -44,7 +44,7 @@
         });
 
         $(".refresh").bind("click",function(){
-            location.reload();
+            location.href="$!homeServer.getURI("device/requestList.htm").addQueryData('host',$!{device})"
         });
         $(".clean").bind("click",function(){
             location.href="$!homeServer.getURI("device/clean.htm").addQueryData('host',$!{device})"

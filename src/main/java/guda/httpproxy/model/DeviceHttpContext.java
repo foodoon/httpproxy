@@ -2,10 +2,14 @@ package guda.httpproxy.model;
 
 import guda.httpproxy.watch.ProxyDispatch;
 
+import java.util.UUID;
+
 /**
  * Created by well on 2014/12/6.
  */
 public class DeviceHttpContext {
+
+    private UUID id  = UUID.randomUUID();
 
     private String deviceHost;
 
@@ -54,6 +58,14 @@ public class DeviceHttpContext {
         StringBuilder buf = new StringBuilder();
         buf.append(getDeviceHttpRequest()).append( ProxyDispatch.CRLF).append(getDeviceHttpResponse());
         return buf.toString();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public DeviceHttpContext copy(){

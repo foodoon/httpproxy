@@ -16,6 +16,6 @@ public class LogResponseInterceptor implements Interceptor {
     @Override
     public void on(DeviceHttpContext deviceHttpContext) {
         //log.info("request" + ProxyDispatch.CRLF + deviceHttpContext.getDeviceHttpRequest() + ProxyDispatch.CRLF + "response:" + ProxyDispatch.CRLF + deviceHttpContext.getDeviceHttpResponse());
-        DeviceHttpFactory.add(deviceHttpContext);
+        //DeviceHttpFactory.add(deviceHttpContext);
     }
 }

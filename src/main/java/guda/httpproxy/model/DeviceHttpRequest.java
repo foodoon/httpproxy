@@ -27,7 +27,7 @@ public class DeviceHttpRequest {
     public static final String REQUEST_HEADER_Accept_Encoding = "Accept-Encoding";
     public static final String REQUEST_HEADER_Connection = "Connection";
     public static final String REQUEST_HEADER_Content_Type = "Content-Type";
-
+    public static final String[] canParseContentType = new String[]{"application/json","text","application/javascript","application/xml","application/text","application/x-www-form-urlencoded"};
     private String status;
 
     private Map<String,String> header = new HashMap<String,String>();
@@ -68,8 +68,7 @@ public class DeviceHttpRequest {
             }
             String[] split1 = contentType.split(";");
             String contentT = split1[0].toLowerCase();
-            if(!contentT.startsWith("text")&&!contentT.startsWith("application/json") &&!contentT.startsWith("application/xml")&&!contentT.startsWith("application/text") &&
-                    !contentT.startsWith("application/x-www-form-urlencoded")){
+            if(!matchContentType(contentT)){
                 body = "request body is stream can not parse,ignore ....";
                 return;
             }
@@ -90,6 +89,18 @@ public class DeviceHttpRequest {
         }catch(Exception e){
             log.error("",e);
         }
+    }
+
+    private boolean matchContentType(String contentType){
+        if(contentType == null){
+            return false;
+        }
+        for(String str:canParseContentType){
+            if(contentType.startsWith(str)|| contentType.equalsIgnoreCase(str)){
+                return true;
+            }
+        }
+        return false;
     }
 
 
